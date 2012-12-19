@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Object Coreference</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/query.css" rel="stylesheet">
+    <link href="./css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+
+  </head>
+
+  <body>   
+    <!-- <div class="container"> -->
+		
+		<div id="topPanel" class="well">
+			<a><img class="span2" src="./img/logo_new.png" id="logo"/></a>
+			<div style="display:inline-table;">
+				<i class="icon-search" style="position: relative;top: 2px;left: 26px;"></i>			
+				<input value="" id="searchInput" class="search-query span6" type="text" placeholder="Input a URI to find its coreferencing SW objects."/>				
+				<div class="btn-group"  style="display:inline-block; vertical-align:middle;margin-left:10px;">
+					<button class="btn btn-primary" id="submitBtn">Coreferencing</button>
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a id="cacheBtn"><i class="icon-ok" id="cacheStatus"></i>   Cache</a><li>
+						<!-- <li><a id="activeLearningBtn"><i class="icon-ok" id="activeLearningStatus"></i>   Active Learning</a><li> -->						
+					</ul>					
+				</div>				
+			</div>
+		</div>
+		
+		<div class="alert alert-danger" id="optionsAlert">
+			<a class="close" id="closeOptionsAlertBtn">×</a>
+			
+			<strong id="alertMsg"></strong>
+		</div>
+		
+		<div id="resultInfo" class="alert alert-info">
+			<div>
+				<span id="resultType">Objects</span> <strong id="curResultsNum">1 - 9</strong> of <strong id="sumResultsNum">9</strong> for your coreferencing <strong id="queryURI"></strong>
+				<span id="groupOptionSpan">Group by Pay-level domain:
+					<div class="btn-group" data-toggle="buttons-radio" style="display:inline-block; vertical-align:middle;">
+						<button class="btn btn-info active" id="group">&nbspON&nbsp</button>
+						<button class="btn btn-info" id="ungroup">OFF</button>				
+					</div>
+				</span>
+			</div>
+		</div>
+		
+
+		
+		<div class="alert alert-success" id="successAlert">
+			<a class="close" id="closeSuccessAlertBtn">×</a>			
+			<strong>Self-training process has done successfully. Would you like to view the results grouped and sorted by their pay-level domain?</strong>
+			<button id="sortYes" class="btn btn-success">Yes</button>
+			<button id="sortNo" class="btn">No</button>
+		</div>
+		
+	
+		
+		<div class="well row-fluid">			
+			<div id="resultPane" class="span6">
+				
+			</div>
+			
+			<div id="fusedResultPane" class="span5">
+				<table class="table">
+					<colgroup>
+					  <col class="span3">
+					  <col class="span3">					  
+					</colgroup>
+					<thead>
+						<th colspan="3">Fused Properties</th>
+					</thead>
+					<tbody>
+						<tr>
+							<th rowspan="2">
+							Property1
+							<div id="menuPane" class="btn-group" data-toggle="buttons-radio">
+								<button id="simpleEnableBtn" class="btn">Positive</button>
+								<button id="complexEnableBtn" class="btn">Negative</button>
+								<button class="btn btn-success dropdown-toggle" data-toggle="dropdown">Support:High <span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a>High</a></li>
+									<li><a>Midium</a></li>
+									<li><a>Low</a></li>
+								</ul>
+							</div>
+							</th>
+							<td>value1</td>
+						</tr>
+						<tr>							
+							<td>value2</td>
+						</tr>
+						<tr>
+							<th rowspan="3">
+							Property2
+							<div id="menuPane" class="btn-group" data-toggle="buttons-radio">
+								<button id="simpleEnableBtn" class="btn">Positive</button>
+								<button id="complexEnableBtn" class="btn">Negative</button>
+								<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Support:Medium <span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a>High</a></li>
+									<li><a>Midium</a></li>
+									<li><a>Low</a></li>
+								</ul>
+							</div>
+							</th>
+							<td>value3</td>
+						</tr>
+						<tr>
+							<td>value4</td>
+						</tr>
+						<tr>
+							<td>value5</td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table">
+					<thead><th>Choose Conjunctions</th></thead>
+					<thead>
+						<th>Negtive Properties</th>
+					</thead>
+					<tbody>
+						<td>
+						<div class="controls">
+						  <label class="checkbox inline">
+							<input type="checkbox" id="inlineCheckbox1" value="option1"> NP1
+						  </label>
+						  <label class="checkbox inline">
+							<input type="checkbox" id="inlineCheckbox2" value="option2"> NP2
+						  </label>
+						  <label class="checkbox inline">
+							<input type="checkbox" id="inlineCheckbox3" value="option3"> NP3
+						  </label>
+						</div>
+						</td>
+					</tbody>
+					<thead>
+						<th>Uncleared Properties</th>
+					</thead>
+					<tbody>
+						<td>
+						<div class="controls">
+						  <label class="checkbox inline">
+							<input type="checkbox" id="inlineCheckbox1" value="option1"> UP1
+						  </label>
+						  <label class="checkbox inline">
+							<input type="checkbox" id="inlineCheckbox2" value="option2"> UP2
+						  </label>
+						  <label class="checkbox inline">
+							<input type="checkbox" id="inlineCheckbox3" value="option3"> UP3
+						  </label>
+						</div>
+						</td>
+					</tbody>
+				</table>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<button class="btn">Cancel</button>
+				</div>
+			</div>
+		
+			
+			
+			<div id="progressBar" class="span12">
+				<center><strong>Loading...</strong></center>
+				<div class="progress progress-info progress-striped active">					
+					<div class="bar" style="width: 100%;"></div>
+				</div>
+			</div>
+			<div id="notFoundAlert" class="span12 alert alert-danger">
+				<p>Your search <strong id="notFoundURI"></strong> did not match any object.</p>
+				<p>Suggestions:
+					<ul>
+						<li>Make sure all the words are spelled correctly.</li>
+						<li>Please try different URIs.</li>
+					</ul>
+				</p>
+			</div>
+			<div id="pagination" class="pagination span12">
+				<ul id="paginationList">					
+					<!-- <li id="page_prev"><a>«</a></li>
+					<li id="page_1" class="active"><a>1</a></li>
+					<li id="page_2"><a>2</a></li>
+					<li id="page_3"><a>3</a></li>
+					<li id="page_next"><a>»</a></li>	 -->				
+				</ul>
+			</div>
+			
+		</div>	
+		
+		<div class="alert alert-info">
+			<center>&copy;2012 <a href="http://ws.nju.edu.cn/">
+			The Websoft Research Group</a>, Nanjing University, P.R. China
+			</center>
+		</div>
+		
+    <!-- </div> <!-- /container --> 
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	
+    <script src="./javascripts/jquery.js"></script>
+    <script src="./javascripts/bootstrap-transition.js"></script>
+    <script src="./javascripts/bootstrap-alert.js"></script>
+    <script src="./javascripts/bootstrap-modal.js"></script>
+    <script src="./javascripts/bootstrap-dropdown.js"></script>
+    <script src="./javascripts/bootstrap-scrollspy.js"></script>
+    <script src="./javascripts/bootstrap-tab.js"></script>
+    <script src="./javascripts/bootstrap-tooltip.js"></script>
+    <script src="./javascripts/bootstrap-popover.js"></script>
+    <script src="./javascripts/bootstrap-button.js"></script>
+    <script src="./javascripts/bootstrap-collapse.js"></script>
+    <script src="./javascripts/bootstrap-carousel.js"></script>
+    <script src="./javascripts/bootstrap-typeahead.js"></script>
+	<script src="./javascripts/query.js"></script>
+
+</body></html>
