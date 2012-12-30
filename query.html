@@ -25,16 +25,36 @@
 		
 		<div id="topPanel" class="well">
 			<a><img class="span2" src="./img/logo_new.png" id="logo"/></a>
-			<div style="display:inline-table;">
+			<div >
+				<div id="datasetOptionPane" class="btn-group" data-toggle="buttons-radio" style="display:inline-block;vertical-align:middle;margin-left:10px;">
+					<button id="dataset-Falcons" class="btn">Falcons</button>
+					<button id="dataset-BTC" class="btn">BTC</button>
+				</div>
 				<i class="icon-search" style="position: relative;top: 2px;left: 26px;"></i>			
 				<input value="" id="searchInput" class="search-query span6" type="text" placeholder="Input a URI to find its coreferencing SW objects."/>				
-				<div class="btn-group"  style="display:inline-block; vertical-align:middle;margin-left:10px;">
+				<div class="btn-group"  style="display:inline-block;vertical-align:middle;margin-left:10px;">
 					<button class="btn btn-primary" id="submitBtn">Coreferencing</button>
 					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
 						<li><a id="cacheBtn"><i class="icon-ok" id="cacheStatus"></i>   Cache</a><li>
 						<!-- <li><a id="activeLearningBtn"><i class="icon-ok" id="activeLearningStatus"></i>   Active Learning</a><li> -->						
 					</ul>					
+				</div>
+				<div style="margin-top:5px;margin-left:50px">				
+					<label class="checkbox">
+						<div class="slide">	
+							<input type="checkbox" value="None" id="mode-FPC" name="check" />
+							<label for="mode-FPC"></label>
+						</div>
+						<label class="checkbox-label">Frequent Pattern Combination</label>
+					</label>
+					<label class="checkbox">
+						<div class="slide">	
+							<input type="checkbox" value="None" id="mode-CC" name="check" />
+							<label for="mode-CC"></label>
+						</div>
+						<label class="checkbox-label">Class Constraint</label>
+					</label>
 				</div>				
 			</div>
 		</div>
@@ -48,12 +68,19 @@
 		<div id="resultInfo" class="alert alert-info">
 			<div>
 				<span id="resultType">Objects</span> <strong id="curResultsNum">1 - 9</strong> of <strong id="sumResultsNum">9</strong> for your coreferencing <strong id="queryURI"></strong>
-				<span id="groupOptionSpan">Group by Pay-level domain:
+<!-- 				<span id="groupOptionSpan">Group by Pay-level domain:
 					<div class="btn-group" data-toggle="buttons-radio" style="display:inline-block; vertical-align:middle;">
 						<button class="btn btn-info active" id="group">&nbspON&nbsp</button>
 						<button class="btn btn-info" id="ungroup">OFF</button>				
 					</div>
-				</span>
+				</span> -->
+				<label id="groupSwitch" class="checkbox">					
+					<div class="slide">	
+						<input type="checkbox" value="None" id="groupByPLD" name="check" />
+						<label for="groupByPLD"></label>
+					</div>
+					<label class="checkbox-label">Group by Pay-level domain</label>					
+				</label>
 			</div>
 		</div>
 		
@@ -72,7 +99,7 @@
 			<div id="resultPane" class="span6">
 				
 			</div>
-			
+			<!--
 			<div id="fusedResultPane" class="span5">
 				<table class="table">
 					<colgroup>
@@ -170,7 +197,7 @@
 					<button class="btn">Cancel</button>
 				</div>
 			</div>
-		
+			-->
 			
 			
 			<div id="progressBar" class="span12">

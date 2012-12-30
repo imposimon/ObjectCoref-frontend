@@ -1,5 +1,5 @@
 ﻿$(document).ready(initPage);
-var serverURL = 'http://ws.nju.edu.cn/objectcoref/service/selftraining/get';
+var serverURL = 'http://localhost/objectcoref/service/selftraining/get';
 var cacheDisabled = 0;
 var activeLearningEnabled = true;
 var alertInfo = {
@@ -9,6 +9,8 @@ var alertInfo = {
 	activeLearningDisabledInfo: 'Active learning disabled!'
 };
 var queryURI = '';
+var datasetOption = '';
+var modeOption = '';
 var PLDArray;
 var objectArray;
 var sumResultNum = 0; //结果总数
@@ -28,9 +30,10 @@ function initPage() {
 	$('#closeSuccessAlertBtn').bind('click', btnListener);
 	$('#sortYes').bind('click', btnListener);
 	$('#sortNo').bind('click', btnListener);	
-	$('#group').bind('click', btnListener);
-	$('#ungroup').bind('click',btnListener);
+	// $('#group').bind('click', btnListener);
+	// $('#ungroup').bind('click',btnListener);
 	$('#logo').bind('click', btnListener);
+	$('#groupByPLD').bind('click', btnListener);
 
 	$(document).keypress(function(e) {		//监听回车
 		if (e.which == 13) { 
@@ -47,8 +50,11 @@ function initPage() {
 	
 	queryURI = getParam('queryURI');
 	cacheDisabled = getParam('nocache');
+	datasetOption = getParam('datasetOption');
+	modeOption = getParam('modeOption');
 	selfTrainingDone = false;
 	refreshCacheSwitch(false);
+	initOptionBtns();
 	$('#queryURI').html(queryURI);
 	$('#searchInput').val(queryURI);
 	sendRequest(-1, cacheDisabled);
@@ -65,25 +71,78 @@ function getParam(paramName) {
 	return null;
 }
 
+
 function submitHandler() {
 	queryURI = $('#searchInput').val().trim();
 	if(queryURI != '') {
-		selfTrainingDone = false;				
-		$('#queryURI').html(queryURI);
-		$('#paginationList').html('');	//清空页码
-		$('#resultPane').html('');		//清空结果
-		PLDArray = new Array();
-		objectArray = new Array();
-		$('#pagination').hide();
-		$('#resultPane').hide();
-		$('#resultInfo').hide();
-		$('#notFoundAlert').hide();
-		$('#successAlert').hide();
-		$('#optionsAlert').hide();
-		$('#progressBar').show();
-		submitQuery();
-		/* var queryStr = encodeURIComponent($('#searchInput').val());
-		location.href = '../queryresult.jsp?query=' + queryStr + '&&act=coref'; */		
+		var modeOption = getModeOption();
+		var datasetOption = getDatasetOption();
+		location.href =	'query.html?' +
+						'queryURI=' + queryURI +
+						'&nocache=' + cacheDisabled +
+						'&modeOption=' + modeOption +
+						'&datasetOption=' + datasetOption
+						;
+		//location.reload();
+	}
+}
+
+// function submitHandler() {
+// 	queryURI = $('#searchInput').val().trim();
+// 	if(queryURI != '') {
+// 		selfTrainingDone = false;				
+// 		$('#queryURI').html(queryURI);
+// 		$('#paginationList').html('');	//清空页码
+// 		$('#resultPane').html('');		//清空结果
+// 		PLDArray = new Array();
+// 		objectArray = new Array();
+// 		$('#pagination').hide();
+// 		$('#resultPane').hide();
+// 		$('#resultInfo').hide();
+// 		$('#notFoundAlert').hide();
+// 		$('#successAlert').hide();
+// 		$('#optionsAlert').hide();
+// 		$('#progressBar').show();
+// 		submitQuery();
+// 		/* var queryStr = encodeURIComponent($('#searchInput').val());
+// 		location.href = '../queryresult.jsp?query=' + queryStr + '&&act=coref'; */
+// 		var queryURI = $('#searchInput').val().trim();
+// 		if(queryURI != '') {
+// 			var modeOption = getModeOption();
+// 			var datasetOption = getDatasetOption();
+// 			window.location =	'query.html?' +
+// 							'queryURI=' + queryURI +
+// 							'&nocache=' + cacheDisabled +
+// 							'&modeOption=' + modeOption +
+// 							'&datasetOption=' + datasetOption
+// 							;
+// 		}		
+// 	}
+// }
+
+function initOptionBtns() {
+	initDatasetBtns();
+	initModeBtns();
+}
+function initDatasetBtns() {
+	if(datasetOption == 'FALCONS') {
+		$('#dataset-Falcons').addClass('active');
+	}
+	else if(datasetOption == 'BTC2011') {
+		$('#dataset-BTC').addClass('active');
+	}
+}
+
+function initModeBtns() {
+	if(modeOption == 'SelfTrainerFPC') {
+		$('#mode-FPC').attr('checked','checked');
+	}
+	else if(modeOption == 'SelfTrainer_CC') {
+		$('#mode-CC').attr('checked','checked');
+	}
+	else if(modeOption == 'SelfTrainerFPC_CC') {
+		$('#mode-CC').attr('checked','checked');
+		$('#mode-FPC').attr('checked','checked');
 	}
 }
 
@@ -112,16 +171,40 @@ function btnListener() {
 			sortYes();
 			closeSuccessAlert();
 		break;
-		case 'ungroup':
-			if(resultIsPLD) {
-				resultIsPLD = false;
-				constructPagination();
-				displayObjectPage(1);
+		// case 'ungroup':
+		// 	if(resultIsPLD) {
+		// 		resultIsPLD = false;
+		// 		constructPagination();
+		// 		displayObjectPage(1);
 				
-			}			
+		// 	}			
+		// break;
+		// case 'group':			
+		// 	if(!resultIsPLD) {
+		// 		resultIsPLD = true;
+		// 		if(!PLDArray || PLDArray.length == 0) {
+		// 			sortYes();
+		// 		}
+		// 		else {		
+		// 			constructPagination();
+		// 			displayPLDPage(1);					
+		// 		}
+		// 	}
+		// break;
+		case 'groupByPLD':
+			groupByPLDHandler();
 		break;
-		case 'group':			
-			if(!resultIsPLD) {
+		case 'logo':
+			btnAnimation();
+			setTimeout('goBack()', 100);
+		break;
+		default:break;
+	}
+}
+
+function groupByPLDHandler() {
+	if($('#groupByPLD').attr('checked')) {
+		if(!resultIsPLD) {
 				resultIsPLD = true;
 				if(!PLDArray || PLDArray.length == 0) {
 					sortYes();
@@ -131,13 +214,16 @@ function btnListener() {
 					displayPLDPage(1);					
 				}
 			}
-		break;
-		case 'logo':
-			btnAnimation();
-			setTimeout('goBack()', 100);
-		break;
-		default:break;
 	}
+	else {
+		if(resultIsPLD) {
+				resultIsPLD = false;
+				constructPagination();
+				displayObjectPage(1);
+				
+			}
+	}
+
 }
 
  function btnAnimation() {
@@ -180,9 +266,18 @@ function submitQuery() {
 }
 
 function sendRequest(iterNum, noCache) {
-	$.getJSON(serverURL, {uri:queryURI, itr:iterNum, nocache: noCache}, function (data) {
-				processData(data);
-			});
+	datasetOption = getDatasetOption();
+	modeOption = getModeOption();
+	$.getJSON(serverURL, 
+		{	uri:queryURI, 
+			itr:iterNum,
+			nocache: noCache,
+			dataset: datasetOption,
+			mode: modeOption 
+		},
+		function (data) {
+			processData(data);
+		});
 }
 
 function processData(data) {
@@ -205,16 +300,18 @@ function processData(data) {
 		// if(iterNum < 9) {
 			// sendRequest(iterNum);
 		// }
-		if(!plds.insts.length) {
+		if(plds.insts && !plds.insts.length) {
 			plds.insts = [plds.insts];
 		}
 		objectArray = plds.insts;
 		sumResultNum = objectArray.length;
 		resultIsPLD = false;
-		$('#group').attr('data-loading-text','Calculating...');
-		$('#group').attr('title', 'Available when calculation is done.');		
-		$('#group').button('loading');
-		$('#ungroup').button('toggle');
+		// $('#group').attr('data-loading-text','Calculating...');
+		// $('#group').attr('title', 'Available when calculation is done.');		
+		// $('#group').button('loading');
+		// $('#ungroup').button('toggle');
+		// $('#groupByPLD').removeAttr('checked');
+		$('#groupSwitch').hide();
 		constructPagination();
 		curPageNum = 1;
 		displayObjectPage(1);
@@ -222,11 +319,12 @@ function processData(data) {
 			iterativeRequest(iterNum);
 		}
 		else if (iterNum == 10){			
-			$('#group').removeAttr('title');
-			$('#group').button('reset');		
+			// $('#group').removeAttr('title');
+			// $('#group').button('reset');
 			selfTrainingDone = true;
 			$('#page_loader').hide();
 			$('#successAlert').show('slow');
+			$('#groupSwitch').show('slow');	
 		}
 	}
 	else {	
@@ -242,8 +340,9 @@ function processData(data) {
 		}
 		sumResultNum = PLDArray.length;
 		resultIsPLD = true;
-		$('#group').button('toggle');
-		$('#ungroup').button('reset');
+		// $('#group').button('toggle');
+		// $('#ungroup').button('reset');
+		$('#groupByPLD').attr('checked','checked');
 		selfTrainingDone = true;
 		$('#page_loader').hide();
 		constructPagination();
@@ -273,7 +372,13 @@ function comparator(a, b) {
 
 //在没有cache的情况下迭代请求
 function iterativeRequest(iterNum) {
-	$.getJSON(serverURL, {uri:queryURI, itr:iterNum, nocache: cacheDisabled}, function (data) {
+	$.getJSON(serverURL,
+	 {	uri:queryURI,
+		itr:iterNum,
+		nocache: cacheDisabled,
+		dataset: datasetOption,
+		mode: modeOption
+	}, function (data) {
 				iterativeProcessData(data);
 			});
 }
@@ -292,11 +397,12 @@ function iterativeProcessData(data) {
 	}
 	//迭代完成
 	else if (iterNum == 10){
-		$('#group').removeAttr('title');	
-		$('#group').button('reset');
+		// $('#group').removeAttr('title');	
+		// $('#group').button('reset');
 		selfTrainingDone = true;
 		$('#page_loader').hide();
 		$('#successAlert').show('slow');
+		$('#groupSwitch').show('slow');
 	}
 }
 
@@ -502,8 +608,9 @@ function constructSnippet(snippet) {
 						href: "http://ws.nju.edu.cn/explorer/entity.jsp?q=" + snippet.predicateURI,
 						target: "_Blank"
 					});
-	if(snippet.subject.match(/^l/)) {//为literal类型		
-		var subjectElement = $('<strong>' + snippet.subjectName.substring(1,snippet.subjectName.length - 1) + ' </strong>');			
+	if(snippet.subject && snippet.subject.match(/^l/)) {//为literal类型
+		if(snippet.subjectName)		
+			var subjectElement = $('<strong>' + snippet.subjectName.substring(1,snippet.subjectName.length - 1) + ' </strong>');			
 	}
 	else {
 		var subjectElement = $('<a>', {
@@ -512,8 +619,9 @@ function constructSnippet(snippet) {
 							target: "_Blank"
 						});
 	}
-	if(snippet.object.match(/^l/)) {//为literal类型			
-		var objectElement = $('<strong>' + snippet.objectName.substring(1,snippet.objectName.length - 1) + ' </strong>');
+	if(snippet.object && snippet.object.match(/^l/)) {//为literal类型
+		if(snippet.objectName)			
+			var objectElement = $('<strong>' + snippet.objectName.substring(1,snippet.objectName.length - 1) + ' </strong>');
 	}
 	else {
 		var objectElement = $('<a>', {
@@ -584,4 +692,31 @@ function closeOptionsAlert() {
 
 function closeSuccessAlert() {
 	$('#successAlert').hide("fast");
+}
+
+function getDatasetOption() {
+	var datasetOption;
+	if($('#dataset-Falcons').hasClass('active')) {
+		datasetOption = 'FALCONS';
+	}
+	else if($('#dataset-BTC').hasClass('active')) {
+		datasetOption = 'BTC2011';
+	}
+	return datasetOption;
+}
+
+function getModeOption() {
+	var modeOption = 'SelfTrainer';
+	if($('#mode-FPC').attr('checked')) {
+		if($('#mode-CC').attr('checked')) {
+			modeOption = 'SelfTrainerFPC_CC';
+		}
+		else {
+			modeOption = 'SelfTrainerFPC';
+		}
+	}
+	else if($('#mode-CC').attr('checked')) {
+		modeOption = 'SelfTrainer_CC';
+	}
+	return modeOption;
 }

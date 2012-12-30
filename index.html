@@ -35,6 +35,10 @@
 		  
 		<div class="well">			
 			<div style="margin-left:auto;margin-right:auto;width:830px;">
+				<div id="datasetOptionPane" class="btn-group" data-toggle="buttons-radio" style="margin-bottom: 5px; margin-left: 15px;">
+					<button id="dataset-Falcons" class="btn active">Falcons</button>
+					<button id="dataset-BTC" class="btn">BTC</button>
+				</div>	
 				<i class="icon-search" id="iconSearch"></i>			
 				<input value="" id="searchInput" class="search-query span6" type="text" placeholder="Input a URI to find its coreferencing SW objects."/>				
 				<div class="btn-group"  style="display:inline-block; vertical-align:middle;margin-left:10px;">
@@ -44,7 +48,28 @@
 						<li><a id="cacheBtn"><i class="icon-ok" id="cacheStatus"></i>   Cache</a><li>
 						<!-- <li><a id="activeLearningBtn"><i class="icon-ok" id="activeLearningStatus"></i>   Active Learning</a><li>	 -->					
 					</ul>					
-				</div>				
+				</div>
+			
+<!-- 				<div id="modeOptionPane" class="btn-group" data-toggle="buttons-checkbox" style="display:inline-block;margin:10px;">
+					<button id="mode-FPC" class="btn">Frequent Pattern Combination</button>
+					<button id="mode-CC" class="btn">Class Constraint</button>
+				</div> -->
+				<div style="margin-top:5px;margin-left:50px">				
+					<label class="checkbox">
+						<div class="slide">	
+							<input type="checkbox" value="None" id="mode-FPC" name="check" />
+							<label for="mode-FPC"></label>
+						</div>
+						<label class="checkbox-label">Frequent Pattern Combination</label>
+					</label>
+					<label class="checkbox">
+						<div class="slide">	
+							<input type="checkbox" value="None" id="mode-CC" name="check" />
+							<label for="mode-CC"></label>
+						</div>
+						<label class="checkbox-label">Class Constraint</label>
+					</label>
+				</div>
 			</div>
 			
 			

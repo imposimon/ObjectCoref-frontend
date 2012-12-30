@@ -52,7 +52,14 @@ function btnListener() {
 function submitQuery() {
 	var queryURI = $('#searchInput').val().trim();
 	if(queryURI != '') {
-		location.href = 'query.html?queryURI=' + queryURI + '&nocache=' + cacheDisabled;
+		var modeOption = getModeOption();
+		var datasetOption = getDatasetOption();
+		location.href =	'query.html?' +
+						'queryURI=' + queryURI +
+						'&nocache=' + cacheDisabled +
+						'&modeOption=' + modeOption +
+						'&datasetOption=' + datasetOption
+						;
 	}
 }
 
@@ -100,4 +107,31 @@ function showOptionsAlert(alertInfo) {
 
 function closeOptionsAlert() {
 	$('#optionsAlert').hide("fast");
+}
+
+function getDatasetOption() {
+	var datasetOption;
+	if($('#dataset-Falcons').hasClass('active')) {
+		datasetOption = 'FALCONS';
+	}
+	else if($('#dataset-BTC').hasClass('active')) {
+		datasetOption = 'BTC2011';
+	}
+	return datasetOption;
+}
+
+function getModeOption() {
+	var modeOption = 'SelfTrainer';
+	if($('#mode-FPC').attr('checked')) {
+		if($('#mode-CC').attr('checked')) {
+			modeOption = 'SelfTrainerFPC_CC';
+		}
+		else {
+			modeOption = 'SelfTrainerFPC';
+		}
+	}
+	else if($('#mode-CC').attr('checked')) {
+		modeOption = 'SelfTrainer_CC';
+	}
+	return modeOption;
 }
