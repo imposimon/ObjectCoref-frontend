@@ -62,10 +62,12 @@ function initPage() {
 
 function getParam(paramName) {
 	var params = location.href.split('?')[1];
-	var paramsArray = params.split('&');
-	for(var i = 0; i < paramsArray.length; i++) {
-		if(paramsArray[i].split('=')[0] == paramName) {
-			return paramsArray[i].split('=')[1];
+	if(params) {
+		var paramsArray = params.split('&');
+		for(var i = 0; i < paramsArray.length; i++) {
+			if(paramsArray[i].split('=')[0] == paramName) {
+				return paramsArray[i].split('=')[1];
+			}
 		}
 	}
 	return null;
